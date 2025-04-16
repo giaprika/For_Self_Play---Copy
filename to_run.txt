@@ -1,0 +1,6 @@
+1. trong file training.py 
+- dòng 76 là buffer = load_buffer("replay_buffer.pt") sửa thành -> buffer = load_buffer("replay_buffer_{tên}.pt") ( VD buffer = load_buffer("replay_buffer_giap.pt")
+- dòng 89 là save_buffer(buffer, "replay_buffer.pt") sửa thành save_buffer(buffer, "replay_buffer_{tên}.pt")
+- dòng 75 là num_games = 60 có thể sửa thành nhỏ hơn, 60 game chạy lâu, chạy 10 game mất tầm 20-30p, cứ cho máy chạy xuyên đêm thì để 60-100 cũng đc, cố gắng chạy mọi lúc mọi nơi :))
+
+2. nếu không chạy được thì nói lại t nha

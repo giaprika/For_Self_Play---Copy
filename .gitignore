@@ -1,0 +1,17 @@
+.venv/
+libs/
+old/
+ChessEngine-main/
+__pycache__/
+*.pgn
+predict.py
+*.pth
+data/prepared_data/
+data/raw_data/
+data/saved_models/
+stockfish/
+.aider.chat.history.md
+.aider.input.history
+.aider.tags.cache.v3/
+.aider*
+.env
