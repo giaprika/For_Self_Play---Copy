@@ -40,10 +40,10 @@ def board_to_tensor(board):
 
     
     # Castling rights
-    tensor[14, :, :] = board.has_queenside_castling_rights(chess.WHITE)
-    tensor[15, :, :] = board.has_kingside_castling_rights(chess.WHITE)
-    tensor[16, :, :] = board.has_queenside_castling_rights(chess.BLACK)
-    tensor[17, :, :] = board.has_kingside_castling_rights(chess.BLACK)
+    tensor[14, :, :] = float(board.has_queenside_castling_rights(chess.WHITE))
+    tensor[15, :, :] = float(board.has_kingside_castling_rights(chess.WHITE))
+    tensor[16, :, :] = float(board.has_queenside_castling_rights(chess.BLACK))
+    tensor[17, :, :] = float(board.has_kingside_castling_rights(chess.BLACK))
     
     # En passant
     if board.ep_square:

@@ -45,8 +45,11 @@ class AlphaZeroTrainer:
                 policy_pred, value_pred = self.model(state_batch)
                 
                 # Loss calculation
-                policy_loss = self.loss_fn(policy_pred, policy_batch)
+                # policy_loss = self.loss_fn(policy_pred, policy_batch)
                 value_loss = self.loss_fn(value_pred.view(-1), value_batch.view(-1))
+                # Policy loss (cross-entropy with target policy)
+                policy_log_probs = torch.log_softmax(policy_pred, dim=1)  # log(π̂_θ)
+                policy_loss = -torch.mean(torch.sum(policy_batch * policy_log_probs, dim=1))  # -π · log(π̂)
                 
                 loss = policy_loss + value_loss
                 total_loss += loss.item()
@@ -72,9 +75,11 @@ def train():
     trainer = AlphaZeroTrainer(model, epochs=10, batch_size=64)
     
     # Số lượng ván cờ để tạo dữ liệu huấn luyện
-    num_games = 10
+    num_games = 60
     buffer = load_buffer("replay_buffer.pt")
-    time_limit = 0.5
+    buffer_1 = load_buffer("replay_buffer_1.pt")
+    buffer_2 = load_buffer("replay_buffer_2.pt")
+    time_limit = 1.0
     
     for game_num in range(num_games):
         print(f"Game {game_num+1}/{num_games} started.")
@@ -86,11 +91,13 @@ def train():
         
         if game_data:
             print("Đang add game_data vào buffer")
-            buffer = add_games_to_buffer(buffer, game_data)
+            buffer_2 = add_games_to_buffer(buffer_2, game_data)
             print("Đang lưu vào file")
-            save_buffer(buffer, "replay_buffer.pt")
+            save_buffer(buffer_2, "replay_buffer_2.pt")
 
-            if (game_num + 1) % 2 == 0:
+            if (game_num + 1) % 20 == 0:
+                buffer = add_games_to_buffer(buffer, buffer_1)
+                buffer = add_games_to_buffer(buffer, buffer_2)
                 trainer.train(buffer)
                 trainer.save_model("model_self_play_1.pt")
             print(f"Game {game_num+1}/{num_games} finished. Result: {game_result}")
